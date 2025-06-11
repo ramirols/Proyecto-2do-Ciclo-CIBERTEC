@@ -1,0 +1,88 @@
+package gui;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class MNAlumno extends JDialog {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JButton btnModificar;
+	private JButton btnEliminar;
+	private JScrollPane scrollPane;
+	private JTable tablaAlumnos;
+	private DefaultTableModel mt;
+	private JPanel panel;
+	private JButton btnConsultar;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MNAlumno dialog = new MNAlumno();
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public MNAlumno() {
+		setTitle("Consultar, Modificar, Eliminar");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 561, 432);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(22, 98, 503, 260);
+		contentPane.add(scrollPane);
+	
+		panel = new JPanel();
+		panel.setBackground(new Color(192, 192, 192));
+		panel.setBounds(10, 91, 527, 277);
+		contentPane.add(panel);
+		
+		/////////////////////
+		//Creacion de tabla//
+		/////////////////////
+		
+		//Modelo de la tabla
+		mt = new DefaultTableModel() {
+			//Sobreescritura del metodo isCellEditable para deshabilitar la edicion de celdas
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		//Array de encabezados
+		String[] encabezados = {"Codigo", "Nombres", "Apellidos", "DNI", "Edad", "Celular", "Estado" };
+		mt.setColumnIdentifiers(encabezados);
+		//Creacion de la tabla
+		tablaAlumnos = new JTable(mt);
+		scrollPane.setViewportView(tablaAlumnos);
+		
+
+	}
+
+}

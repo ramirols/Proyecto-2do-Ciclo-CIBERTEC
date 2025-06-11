@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="clases.Alumno"/>
+    <fullyQualifiedTypeName name="clases.Libreria"/>
+    <fullyQualifiedTypeName name="clases.Curso"/>
+    <fullyQualifiedTypeName name="java.lang.NumberFormatException"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="javax.swing.RowSorter.SortKey"/>
+    <fullyQualifiedTypeName name="javax.swing.SortOrder"/>
+</qualifiedTypeNameHistroy>
