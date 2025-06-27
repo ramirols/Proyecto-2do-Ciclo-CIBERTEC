@@ -112,7 +112,7 @@ public class CMEAlumno extends JDialog implements ActionListener {
 			}
 			@Override
 			//Sobreescritura del metodo getColumnClass para establecer la primera columna como tipos de datos enteros
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 if (columnIndex == 0) { // Si la columna ID debe ser int
                     return Integer.class;
                 }

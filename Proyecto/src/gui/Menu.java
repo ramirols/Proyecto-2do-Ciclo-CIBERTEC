@@ -5,14 +5,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import clases.Alumno;
-import clases.Curso;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import colecciones.ArrayAlumnos;
+import gui_consulta.ConsultaAlumnoCurso;
+import gui_consulta.ConsultaMatriculasRetiros;
+import gui_registro.RegistroMatricula;
+import gui_reporte.Reporte_MP;
+import gui_reporte.Reporte_MPC;
+import gui_reporte.Reporte_MV;
 
 public class Menu extends JFrame implements ActionListener {
 
@@ -23,12 +27,10 @@ public class Menu extends JFrame implements ActionListener {
 	private JMenu mnRegistro;
 	private JMenu mnConsulta;
 	private JMenu mnReporte;
-	private JMenu mnAlumno;
-	private JMenuItem mntmAlumnoAdicionar;
-	private JMenuItem mntmAlumnoConsultarModificarEliminar;
-	private JMenu mnCurso;
-	private JMenuItem mntmCursoAdicionar;
-	private JMenuItem mntmCursoConsultarModificarEliminar;
+	private JMenuItem mntmAlumno;
+	private JMenuItem mntmCurso;
+	private JMenuItem mntmConsultaAlumno;
+	private JMenuItem mntmConsultaMatriculaRetiro;
 
 	/**
 	 * Launch the application.
@@ -61,98 +63,120 @@ public class Menu extends JFrame implements ActionListener {
 		mnMantenimiento = new JMenu("Mantenimiento");
 		menuBar.add(mnMantenimiento);
 		
-		mnAlumno = new JMenu("Alumno");
-		mnMantenimiento.add(mnAlumno);
+		mntmAlumno = new JMenuItem("Alumnos");
+		mntmAlumno.addActionListener(this);
+		mnMantenimiento.add(mntmAlumno);
 		
-		mntmAlumnoAdicionar = new JMenuItem("Adicionar");
-		mntmAlumnoAdicionar.addActionListener(this);
-		mnAlumno.add(mntmAlumnoAdicionar);
-		
-		mntmAlumnoConsultarModificarEliminar = new JMenuItem("Consultar, modificar, eliminar");
-		mntmAlumnoConsultarModificarEliminar.addActionListener(this);
-		mnAlumno.add(mntmAlumnoConsultarModificarEliminar);
-		
-		mnCurso = new JMenu("Curso");
-		mnMantenimiento.add(mnCurso);
-		
-		mntmCursoAdicionar = new JMenuItem("Adicionar");
-		mntmCursoAdicionar.addActionListener(this);
-		mnCurso.add(mntmCursoAdicionar);
-		
-		mntmCursoConsultarModificarEliminar = new JMenuItem("Consultar, modificar, eliminar");
-		mntmCursoConsultarModificarEliminar.addActionListener(this);
-		mnCurso.add(mntmCursoConsultarModificarEliminar);
+		mntmCurso = new JMenuItem("Cursos");
+		mntmCurso.addActionListener(this);
+		mnMantenimiento.add(mntmCurso);
 		
 		mnRegistro = new JMenu("Registro");
 		menuBar.add(mnRegistro);
 		
+		mntmRegistroMatricula = new JMenuItem("Matricula");
+		mntmRegistroMatricula.addActionListener(this);
+		mnRegistro.add(mntmRegistroMatricula);
+		
 		mnConsulta = new JMenu("Consulta");
 		menuBar.add(mnConsulta);
 		
+		mntmConsultaAlumno = new JMenuItem("Alumnos y Cursos");
+		mntmConsultaAlumno.addActionListener(this);
+		mnConsulta.add(mntmConsultaAlumno);
+		
+		mntmConsultaMatriculaRetiro = new JMenuItem("Matrículas y Retiros");
+		mntmConsultaMatriculaRetiro.addActionListener(this);
+		mnConsulta.add(mntmConsultaMatriculaRetiro);
+		
 		mnReporte = new JMenu("Reporte");
 		menuBar.add(mnReporte);
+		
+		mntmMatriculaPendiente = new JMenuItem("Matrícula pendiente");
+		mntmMatriculaPendiente.addActionListener(this);
+		mnReporte.add(mntmMatriculaPendiente);
+		
+		mntmMatriculaPendienteCurso = new JMenuItem("Matricula Vigente");
+		mntmMatriculaPendienteCurso.addActionListener(this);
+		mnReporte.add(mntmMatriculaPendienteCurso);
+		
+		mntmMatriculaPorCurso = new JMenuItem("Matricula por Curso");
+		mntmMatriculaPorCurso.addActionListener(this);
+		mnReporte.add(mntmMatriculaPorCurso);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		//Datos de ejemplo
-		ejemploDeAlumnos();
-		ejemploDeCursos();
 	}
+	
+	ArrayAlumnos aa = new ArrayAlumnos();
+	private JMenuItem mntmMatriculaPendiente;
+	private JMenuItem mntmMatriculaPendienteCurso;
+	private JMenuItem mntmRegistroMatricula;
+	private JMenuItem mntmMatriculaPorCurso;
+	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == mntmCursoConsultarModificarEliminar) {
-			actionPerformedMntmCursoConsultarModificarEliminar(e);
+		if (e.getSource() == mntmMatriculaPorCurso) {
+			actionPerformedMntmMatriculaPorCurso(e);
 		}
-		if (e.getSource() == mntmCursoAdicionar) {
-			actionPerformedMntmCursoAdicionar(e);
+		if (e.getSource() == mntmRegistroMatricula) {
+			actionPerformedMntmRegistroMatricula(e);
 		}
-		if (e.getSource() == mntmAlumnoConsultarModificarEliminar) {
-			actionPerformedMntmAlumnoConsultarModificarEliminar(e);
+		if (e.getSource() == mntmMatriculaPendienteCurso) {
+			actionPerformedMntmMatriculaPendienteCurso(e);
 		}
-		if (e.getSource() == mntmAlumnoAdicionar) {
-			actionPerformedMntmAlumnoAdicionar(e);
+		if (e.getSource() == mntmCurso) {
+			actionPerformedMntmCurso(e);
 		}
+		if (e.getSource() == mntmAlumno) {
+			actionPerformedMntmAlumno(e);
+		}
+		
+		if (e.getSource() == mntmMatriculaPendiente) {
+            actionPerformedMntmMatriculaPendiente(e);
+        }
+		
+		if (e.getSource() == mntmConsultaAlumno) {
+			ConsultaAlumnoCurso ventana = new ConsultaAlumnoCurso();
+			ventana.setVisible(true);
+		}
+		
+		if (e.getSource() == mntmConsultaMatriculaRetiro) {
+			new ConsultaMatriculasRetiros().setVisible(true);
+		}
+		
 	}
-	protected void actionPerformedMntmAlumnoAdicionar(ActionEvent e) {
-		AlumnoAdicionar AlAdicionar = new AlumnoAdicionar();
-		AlAdicionar.setLocationRelativeTo(this);
-		AlAdicionar.setVisible(true);
+	protected void actionPerformedMntmAlumno(ActionEvent e) {
+		MantenimientoAlumno MA = new MantenimientoAlumno();
+		MA.setLocationRelativeTo(MA);
+		MA.setVisible(true);
 	}
-	protected void actionPerformedMntmAlumnoConsultarModificarEliminar(ActionEvent e) {
-		CMEAlumno CMEA = new CMEAlumno();
-		CMEA.setLocationRelativeTo(this);
-		CMEA.setVisible(true);
+	protected void actionPerformedMntmCurso(ActionEvent e) {
+		MantenimientoCurso MC = new MantenimientoCurso();
+		MC.setLocationRelativeTo(MC);
+		MC.setVisible(true);
 	}
-	
-	protected void actionPerformedMntmCursoAdicionar(ActionEvent e) {
-		CursoAdicionar CuAdicionar = new CursoAdicionar();
-		CuAdicionar.setLocationRelativeTo(this);
-		CuAdicionar.setVisible(true);
+
+	protected void actionPerformedMntmMatriculaPendiente(ActionEvent e) {
+        Reporte_MP MP = new Reporte_MP();
+        MP.setLocationRelativeTo(this);
+        MP.setVisible(true);
 	}
-	protected void actionPerformedMntmCursoConsultarModificarEliminar(ActionEvent e) {
-		CMECurso CMEC = new CMECurso();
-		CMEC.setLocationRelativeTo(this);
-		CMEC.setVisible(true);
+	protected void actionPerformedMntmMatriculaPendienteCurso(ActionEvent e) {
+		Reporte_MPC MPC = new Reporte_MPC();
+		MPC.setLocationRelativeTo(this);
+        MPC.setVisible(true);
 	}
-	
-	//Datos de ejemplo
-	void ejemploDeAlumnos(){
-		Alumno.alumnos.put("14235672", new Alumno("Rodolfo", "Flores", "14235672", 17, 982398322));
-		Alumno.alumnos.put("43578904", new Alumno("Mateo", "Diaz", "43578904", 18, 962230453));
-		Alumno.alumnos.put("45678890", new Alumno("Piero", "Quispe", "45678890", 18, 910678321));
-		Alumno.alumnos.put("73211246", new Alumno("Felix", "Torres", "73211246", 17, 906298255));
-		Alumno.alumnos.put("99645672", new Alumno("Pedro", "Valera", "99645672", 19, 982398011));
-		Alumno.alumnos.put("51432432", new Alumno("Juan", "Gonzales", "51432432", 24, 986323420));
-		Alumno.alumnos.put("88902346", new Alumno("Jose", "Quispe", "88902346", 20, 982534321));
+	protected void actionPerformedMntmRegistroMatricula(ActionEvent e) {
+		RegistroMatricula RM = new RegistroMatricula();
+		RM.setLocationRelativeTo(this);
+        RM.setVisible(true);
 	}
-	void ejemploDeCursos() {
-		Curso.cursos.put(2326, new Curso(2326, "Matematicas", 1, 3, 7));
-		Curso.cursos.put(4375, new Curso(4375, "Desarrollo de Habilidades profesionales", 1, 4, 9));
-		Curso.cursos.put(1800, new Curso(1800, "Introducción a la algoritmia", 1, 6, 12));
-		Curso.cursos.put(2317, new Curso(2317, "Fundamentos de Gestión empresarial", 1, 3, 5));
-		Curso.cursos.put(1802, new Curso(1802, "Arquitectura de Entornos Web", 1, 4, 7));
-		Curso.cursos.put(2334, new Curso(2334, "Tecnologías de la Información", 1, 3, 7));
+	protected void actionPerformedMntmMatriculaPorCurso(ActionEvent e) {
+		Reporte_MV MV = new Reporte_MV();
+		MV.setLocationRelativeTo(this);
+        MV.setVisible(true);
 	}
 }

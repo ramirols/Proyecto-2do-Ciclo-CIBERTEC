@@ -50,6 +50,4 @@ public class Curso {
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
-	
-	
 }

@@ -187,7 +187,10 @@ public class AlumnoAdicionar extends JDialog implements ActionListener {
 				return;
 			}
 		}
-		Alumno.alumnos.put(dni, new Alumno(nombres, apellidos, dni, edad, celular));
+		
+		int codAlumno=0;
+		int estado=0;
+		Alumno.alumnos.put(dni, new Alumno( codAlumno,  nombres,  apellidos,  dni,  edad,  celular,  estado));
 		
 		showMsg("Se agrego correctamente al estudiante " + nombres + " a la lista de alumnos");
 	}

@@ -19,13 +19,14 @@ public class Alumno {
 	}
 	
 	//Metodo constructor
-	public Alumno(String nombres, String apellidos, String dni, int edad, int celular) {
-		this.nombres = nombres;
-		this.apellidos = apellidos;
-		this.dni = dni;
-		this.edad = edad;
-		this.celular = celular;
-		this.estado = 0;
+	public Alumno(int codAlumno, String nombres, String apellidos, String dni, int edad, int celular, int estado) {
+		this.codAlumno=codAlumno;
+		this.nombres=nombres;
+		this.apellidos=apellidos;
+		this.dni=dni;
+		this.edad=edad;
+		this.celular=celular;
+		this.estado = estado;
 		codAlumno = codAlumnoIncrement;
 		codAlumnoIncrement++;
 	}

@@ -7,4 +7,5 @@
     <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
     <fullyQualifiedTypeName name="javax.swing.RowSorter.SortKey"/>
     <fullyQualifiedTypeName name="javax.swing.SortOrder"/>
+    <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 </qualifiedTypeNameHistroy>
