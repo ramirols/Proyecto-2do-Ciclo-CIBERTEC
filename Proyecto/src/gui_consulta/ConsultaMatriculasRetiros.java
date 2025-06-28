@@ -1,6 +1,7 @@
 package gui_consulta;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import clases.Alumno;
 import clases.Curso;
@@ -12,138 +13,135 @@ import colecciones.ArrayMatricula;
 import colecciones.ArrayRetiro;
 
 public class ConsultaMatriculasRetiros extends JDialog implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTextField txtNumMatricula, txtNumRetiro;
-	private JTextArea txtResultado;
-	private JButton btnBuscarMatricula, btnBuscarRetiro;
+    private static final long serialVersionUID = 1L;
+    private JTextField txtNumMatricula, txtNumRetiro;
+    private JButton btnBuscarMatricula, btnBuscarRetiro;
 
-	ArrayMatricula matriculas = new ArrayMatricula();
-	ArrayRetiro retiros = new ArrayRetiro();
-	ArrayAlumnos alumnos = new ArrayAlumnos();
-	ArrayCursos cursos = new ArrayCursos();
+    private JTable tablaResultado;
+    private DefaultTableModel modeloTabla;
 
-	public ConsultaMatriculasRetiros() {
-		setTitle("Consulta Matrículas y Retiros");
-		setSize(530, 460);
-		setLocationRelativeTo(null);
-		setLayout(null);
+    ArrayMatricula matriculas = new ArrayMatricula();
+    ArrayRetiro retiros = new ArrayRetiro();
+    ArrayAlumnos alumnos = new ArrayAlumnos();
+    ArrayCursos cursos = new ArrayCursos();
 
-		JLabel lblMatricula = new JLabel("Número de matrícula:");
-		lblMatricula.setBounds(30, 20, 150, 25);
-		add(lblMatricula);
+    public ConsultaMatriculasRetiros() {
+        setTitle("Consulta Matrículas y Retiros");
+        setSize(550, 460);
+        setLocationRelativeTo(null);
+        setLayout(null);
 
-		txtNumMatricula = new JTextField();
-		txtNumMatricula.setBounds(180, 20, 150, 25);
-		add(txtNumMatricula);
+        JLabel lblMatricula = new JLabel("Número de matrícula:");
+        lblMatricula.setBounds(30, 20, 150, 25);
+        add(lblMatricula);
 
-		btnBuscarMatricula = new JButton("Buscar Matrícula");
-		btnBuscarMatricula.setBounds(340, 20, 150, 25);
-		btnBuscarMatricula.addActionListener(this);
-		add(btnBuscarMatricula);
+        txtNumMatricula = new JTextField();
+        txtNumMatricula.setBounds(180, 20, 150, 25);
+        add(txtNumMatricula);
 
-		JLabel lblRetiro = new JLabel("Número de retiro:");
-		lblRetiro.setBounds(30, 60, 150, 25);
-		add(lblRetiro);
+        btnBuscarMatricula = new JButton("Buscar Matrícula");
+        btnBuscarMatricula.setBounds(340, 20, 150, 25);
+        btnBuscarMatricula.addActionListener(this);
+        add(btnBuscarMatricula);
 
-		txtNumRetiro = new JTextField();
-		txtNumRetiro.setBounds(180, 60, 150, 25);
-		add(txtNumRetiro);
+        JLabel lblRetiro = new JLabel("Número de retiro:");
+        lblRetiro.setBounds(30, 60, 150, 25);
+        add(lblRetiro);
 
-		btnBuscarRetiro = new JButton("Buscar Retiro");
-		btnBuscarRetiro.setBounds(340, 60, 150, 25);
-		btnBuscarRetiro.addActionListener(this);
-		add(btnBuscarRetiro);
+        txtNumRetiro = new JTextField();
+        txtNumRetiro.setBounds(180, 60, 150, 25);
+        add(txtNumRetiro);
 
-		txtResultado = new JTextArea();
-		txtResultado.setEditable(false);
-		JScrollPane scroll = new JScrollPane(txtResultado);
-		scroll.setBounds(30, 110, 460, 280);
-		add(scroll);
-	}
+        btnBuscarRetiro = new JButton("Buscar Retiro");
+        btnBuscarRetiro.setBounds(340, 60, 150, 25);
+        btnBuscarRetiro.addActionListener(this);
+        add(btnBuscarRetiro);
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnBuscarMatricula) {
-			consultarMatricula();
-		}
-		if (e.getSource() == btnBuscarRetiro) {
-			consultarRetiro();
-		}
-	}
+        String[] columnas = {"Campo", "Valor"};
+        modeloTabla = new DefaultTableModel(columnas, 0);
+        tablaResultado = new JTable(modeloTabla);
+        JScrollPane scroll = new JScrollPane(tablaResultado);
+        scroll.setBounds(30, 110, 480, 280);
+        add(scroll);
+    }
 
-	private void consultarMatricula() {
-		txtResultado.setText("");
-		int num;
-		try {
-			num = Integer.parseInt(txtNumMatricula.getText().trim());
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Número inválido");
-			return;
-		}
-		Matricula m = matriculas.buscar(num);
-		if (m == null) {
-			txtResultado.setText("No se encontró la matrícula.");
-			return;
-		}
-		Alumno a = alumnos.buscar(m.getCodAlumno());
-		Curso c = cursos.buscar(m.getCodCurso());
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnBuscarMatricula) {
+            consultarMatricula();
+        }
+        if (e.getSource() == btnBuscarRetiro) {
+            consultarRetiro();
+        }
+    }
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(">>> DATOS DE MATRÍCULA <<<\n\n");
-		sb.append("N° Matrícula: ").append(m.getNumMatricula()).append("\n");
-		sb.append("Fecha: ").append(m.getFecha()).append("\n");
-		sb.append("Hora: ").append(m.getHora()).append("\n");
+    private void consultarMatricula() {
+        modeloTabla.setRowCount(0); // limpieza de tabla
 
-		sb.append("\n--- ALUMNO ---\n");
-		sb.append("Código: ").append(a.getCodAlumno()).append("\n");
-		sb.append("Nombre: ").append(a.getNombres()).append(" ").append(a.getApellidos()).append("\n");
-		sb.append("DNI: ").append(a.getDni()).append("\n");
+        int num;
+        try {
+            num = Integer.parseInt(txtNumMatricula.getText().trim());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Número inválido");
+            return;
+        }
 
-		sb.append("\n--- CURSO ---\n");
-		sb.append("Código: ").append(c.getCodigo()).append("\n");
-		sb.append("Asignatura: ").append(c.getAsignatura()).append("\n");
+        Matricula m = matriculas.buscar(num);
+        if (m == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró la matrícula.");
+            return;
+        }
 
-		txtResultado.setText(sb.toString());
-	}
+        Alumno a = alumnos.buscar(m.getCodAlumno());
+        Curso c = cursos.buscar(m.getCodCurso());
 
-	private void consultarRetiro() {
-		txtResultado.setText("");
-		int num;
-		try {
-			num = Integer.parseInt(txtNumRetiro.getText().trim());
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Número inválido");
-			return;
-		}
-		Retiro r = retiros.buscar(num);
-		if (r == null) {
-			txtResultado.setText("No se encontró el retiro.");
-			return;
-		}
-		Matricula m = matriculas.buscar(r.getNumMatricula());
-		if (m == null) {
-			txtResultado.setText("No se encontró la matrícula asociada.");
-			return;
-		}
-		Alumno a = alumnos.buscar(m.getCodAlumno());
-		Curso c = cursos.buscar(m.getCodCurso());
+        modeloTabla.addRow(new Object[]{">>> DATOS DE MATRÍCULA <<<", ""});
+        modeloTabla.addRow(new Object[]{"N° Matrícula", m.getNumMatricula()});
+        modeloTabla.addRow(new Object[]{"Fecha", m.getFecha()});
+        modeloTabla.addRow(new Object[]{"Hora", m.getHora()});
+        modeloTabla.addRow(new Object[]{"--- ALUMNO ---", ""});
+        modeloTabla.addRow(new Object[]{"Código", a.getCodAlumno()});
+        modeloTabla.addRow(new Object[]{"Nombre", a.getNombres() + " " + a.getApellidos()});
+        modeloTabla.addRow(new Object[]{"DNI", a.getDni()});
+        modeloTabla.addRow(new Object[]{"--- CURSO ---", ""});
+        modeloTabla.addRow(new Object[]{"Código", c.getCodigo()});
+        modeloTabla.addRow(new Object[]{"Asignatura", c.getAsignatura()});
+    }
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(">>> DATOS DE RETIRO <<<\n\n");
-		sb.append("N° Retiro: ").append(r.getNumRetiro()).append("\n");
-		sb.append("Fecha: ").append(r.getFecha()).append("\n");
-		sb.append("Hora: ").append(r.getHora()).append("\n");
+    private void consultarRetiro() {
+        modeloTabla.setRowCount(0); // limpieza de tabla
 
-		sb.append("\n--- ALUMNO ---\n");
-		sb.append("Código: ").append(a.getCodAlumno()).append("\n");
-		sb.append("Nombre: ").append(a.getNombres()).append(" ").append(a.getApellidos()).append("\n");
+        int num;
+        try {
+            num = Integer.parseInt(txtNumRetiro.getText().trim());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Número inválido");
+            return;
+        }
 
-		sb.append("\n--- CURSO ---\n");
-		sb.append("Código: ").append(c.getCodigo()).append("\n");
-		sb.append("Asignatura: ").append(c.getAsignatura()).append("\n");
+        Retiro r = retiros.buscar(num);
+        if (r == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el retiro.");
+            return;
+        }
 
-		txtResultado.setText(sb.toString());
-	}
+        Matricula m = matriculas.buscar(r.getNumMatricula());
+        if (m == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró la matrícula asociada.");
+            return;
+        }
+
+        Alumno a = alumnos.buscar(m.getCodAlumno());
+        Curso c = cursos.buscar(m.getCodCurso());
+
+        modeloTabla.addRow(new Object[]{">>> DATOS DE RETIRO <<<", ""});
+        modeloTabla.addRow(new Object[]{"N° Retiro", r.getNumRetiro()});
+        modeloTabla.addRow(new Object[]{"Fecha", r.getFecha()});
+        modeloTabla.addRow(new Object[]{"Hora", r.getHora()});
+        modeloTabla.addRow(new Object[]{"--- ALUMNO ---", ""});
+        modeloTabla.addRow(new Object[]{"Código", a.getCodAlumno()});
+        modeloTabla.addRow(new Object[]{"Nombre", a.getNombres() + " " + a.getApellidos()});
+        modeloTabla.addRow(new Object[]{"--- CURSO ---", ""});
+        modeloTabla.addRow(new Object[]{"Código", c.getCodigo()});
+        modeloTabla.addRow(new Object[]{"Asignatura", c.getAsignatura()});
+    }
 }

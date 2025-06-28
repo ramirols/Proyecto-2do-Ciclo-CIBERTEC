@@ -1,6 +1,7 @@
 package gui_consulta;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import clases.Alumno;
 import clases.Curso;
@@ -10,91 +11,92 @@ import colecciones.ArrayCursos;
 import colecciones.ArrayMatricula;
 
 public class ConsultaAlumnoCurso extends JDialog implements ActionListener {
-	private static final long serialVersionUID = 1L;
-	private JTextField txtCodigo;
-	private JTextArea txtResultado;
-	private JButton btnBuscar;
+    private static final long serialVersionUID = 1L;
+    private JTextField txtCodigo;
+    private JButton btnBuscar;
+    private JTable tablaResultado;
+    private DefaultTableModel modeloTabla;
 
-	ArrayAlumnos alumnos = new ArrayAlumnos();
-	ArrayMatricula matriculas = new ArrayMatricula();
-	ArrayCursos cursos = new ArrayCursos();
+    ArrayAlumnos alumnos = new ArrayAlumnos();
+    ArrayMatricula matriculas = new ArrayMatricula();
+    ArrayCursos cursos = new ArrayCursos();
 
-	public ConsultaAlumnoCurso() {
-		setTitle("Consulta Alumno y Curso");
-		setSize(500, 400);
-		setLocationRelativeTo(null);
-		setLayout(null);
+    public ConsultaAlumnoCurso() {
+        setTitle("Consulta Alumno y Curso");
+        setSize(550, 400);
+        setLocationRelativeTo(null);
+        setLayout(null);
 
-		JLabel lblCodigo = new JLabel("Código del alumno:");
-		lblCodigo.setBounds(30, 30, 150, 25);
-		add(lblCodigo);
+        JLabel lblCodigo = new JLabel("Código del alumno:");
+        lblCodigo.setBounds(30, 30, 150, 25);
+        add(lblCodigo);
 
-		txtCodigo = new JTextField();
-		txtCodigo.setBounds(180, 30, 150, 25);
-		add(txtCodigo);
+        txtCodigo = new JTextField();
+        txtCodigo.setBounds(180, 30, 150, 25);
+        add(txtCodigo);
 
-		btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(340, 30, 100, 25);
-		btnBuscar.addActionListener(this);
-		add(btnBuscar);
+        btnBuscar = new JButton("Buscar");
+        btnBuscar.setBounds(340, 30, 100, 25);
+        btnBuscar.addActionListener(this);
+        add(btnBuscar);
 
-		txtResultado = new JTextArea();
-		txtResultado.setEditable(false);
-		JScrollPane scroll = new JScrollPane(txtResultado);
-		scroll.setBounds(30, 80, 410, 250);
-		add(scroll);
-	}
+        String[] columnas = {"Campo", "Valor"};
+        modeloTabla = new DefaultTableModel(columnas, 0);
+        tablaResultado = new JTable(modeloTabla);
+        JScrollPane scroll = new JScrollPane(tablaResultado);
+        scroll.setBounds(30, 80, 480, 250);
+        add(scroll);
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnBuscar) {
-			consultar();
-		}
-	}
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnBuscar) {
+            consultar();
+        }
+    }
 
-	private void consultar() {
-		txtResultado.setText("");
-		int cod;
-		try {
-			cod = Integer.parseInt(txtCodigo.getText().trim());
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Código inválido");
-			return;
-		}
-		Alumno alu = alumnos.buscar(cod);
-		if (alu == null) {
-			txtResultado.setText("Alumno no encontrado.");
-			return;
-		}
+    private void consultar() {
+        modeloTabla.setRowCount(0); // limpieza de tabla
+        int cod;
+        try {
+            cod = Integer.parseInt(txtCodigo.getText().trim());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Código inválido");
+            return;
+        }
+        Alumno alu = alumnos.buscar(cod);
+        if (alu == null) {
+            JOptionPane.showMessageDialog(this, "Alumno no encontrado.");
+            return;
+        }
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("CÓDIGO: ").append(alu.getCodAlumno()).append("\n");
-		sb.append("NOMBRES: ").append(alu.getNombres()).append("\n");
-		sb.append("APELLIDOS: ").append(alu.getApellidos()).append("\n");
-		sb.append("DNI: ").append(alu.getDni()).append("\n");
-		sb.append("EDAD: ").append(alu.getEdad()).append("\n");
-		sb.append("CELULAR: ").append(alu.getCelular()).append("\n");
-		sb.append("ESTADO: ").append(switch (alu.getEstado()) {
-			case 0 -> "REGISTRADO";
-			case 1 -> "MATRICULADO";
-			case 2 -> "RETIRADO";
-			default -> "DESCONOCIDO";
-		}).append("\n");
+        String estado = switch (alu.getEstado()) {
+            case 0 -> "REGISTRADO";
+            case 1 -> "MATRICULADO";
+            case 2 -> "RETIRADO";
+            default -> "DESCONOCIDO";
+        };
 
-		if (alu.getEstado() == 1) {
-			Matricula mat = matriculas.buscarCod(cod);
-			if (mat != null) {
-				Curso cur = cursos.buscar(mat.getCodCurso());
-				if (cur != null) {
-					sb.append("\n--- CURSO MATRICULADO ---\n");
-					sb.append("Código Curso: ").append(cur.getCodigo()).append("\n");
-					sb.append("Asignatura: ").append(cur.getAsignatura()).append("\n");
-					sb.append("Ciclo: ").append(cur.getCiclo()).append("\n");
-					sb.append("Créditos: ").append(cur.getCreditos()).append("\n");
-					sb.append("Horas: ").append(cur.getHoras()).append("\n");
-				}
-			}
-		}
+        modeloTabla.addRow(new Object[]{"CÓDIGO", alu.getCodAlumno()});
+        modeloTabla.addRow(new Object[]{"NOMBRES", alu.getNombres()});
+        modeloTabla.addRow(new Object[]{"APELLIDOS", alu.getApellidos()});
+        modeloTabla.addRow(new Object[]{"DNI", alu.getDni()});
+        modeloTabla.addRow(new Object[]{"EDAD", alu.getEdad()});
+        modeloTabla.addRow(new Object[]{"CELULAR", alu.getCelular()});
+        modeloTabla.addRow(new Object[]{"ESTADO", estado});
 
-		txtResultado.setText(sb.toString());
-	}
+        if (alu.getEstado() == 1) {
+            Matricula mat = matriculas.buscarCod(cod);
+            if (mat != null) {
+                Curso cur = cursos.buscar(mat.getCodCurso());
+                if (cur != null) {
+                    modeloTabla.addRow(new Object[]{"--- CURSO MATRICULADO ---", ""});
+                    modeloTabla.addRow(new Object[]{"Código Curso", cur.getCodigo()});
+                    modeloTabla.addRow(new Object[]{"Asignatura", cur.getAsignatura()});
+                    modeloTabla.addRow(new Object[]{"Ciclo", cur.getCiclo()});
+                    modeloTabla.addRow(new Object[]{"Créditos", cur.getCreditos()});
+                    modeloTabla.addRow(new Object[]{"Horas", cur.getHoras()});
+                }
+            }
+        }
+    }
 }
