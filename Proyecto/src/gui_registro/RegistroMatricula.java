@@ -7,6 +7,8 @@ import colecciones.*;
 import javax.swing.JDialog;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -79,6 +81,9 @@ public class RegistroMatricula extends JDialog implements ActionListener, ItemLi
 		setResizable(false);
 		getContentPane().setEnabled(false);
 		setTitle("REGISTRO MATRICULA");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 900, 520);
 		getContentPane().setLayout(null);
 		

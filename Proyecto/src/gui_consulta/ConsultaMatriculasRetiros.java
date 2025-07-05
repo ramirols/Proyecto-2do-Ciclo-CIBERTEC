@@ -12,10 +12,13 @@ import colecciones.ArrayCursos;
 import colecciones.ArrayMatricula;
 import colecciones.ArrayRetiro;
 
-public class ConsultaMatriculasRetiros extends JDialog implements ActionListener {
+public class ConsultaMatriculasRetiros extends JDialog implements ActionListener, ItemListener {
     private static final long serialVersionUID = 1L;
-    private JTextField txtNumMatricula, txtNumRetiro;
-    private JButton btnBuscarMatricula, btnBuscarRetiro;
+    
+    private JComboBox<String> cbTipoConsulta;
+    private JLabel lblNumero;
+    private JTextField txtNumero;
+    private JButton btnConsultar;
 
     private JTable tablaResultado;
     private DefaultTableModel modeloTabla;
@@ -27,62 +30,73 @@ public class ConsultaMatriculasRetiros extends JDialog implements ActionListener
 
     public ConsultaMatriculasRetiros() {
         setTitle("Consulta Matrículas y Retiros");
+        
+        setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+        
         setSize(550, 460);
         setLocationRelativeTo(null);
         setLayout(null);
 
-        JLabel lblMatricula = new JLabel("Número de matrícula:");
-        lblMatricula.setBounds(30, 20, 150, 25);
-        add(lblMatricula);
+        JLabel lblTipo = new JLabel("Tipo de consulta:");
+        lblTipo.setBounds(30, 20, 120, 25);
+        add(lblTipo);
 
-        txtNumMatricula = new JTextField();
-        txtNumMatricula.setBounds(180, 20, 150, 25);
-        add(txtNumMatricula);
+        cbTipoConsulta = new JComboBox<>(new String[]{"Matrícula", "Retiro"});
+        cbTipoConsulta.setBounds(150, 20, 150, 25);
+        cbTipoConsulta.addItemListener(this);
+        add(cbTipoConsulta);
 
-        btnBuscarMatricula = new JButton("Buscar Matrícula");
-        btnBuscarMatricula.setBounds(340, 20, 150, 25);
-        btnBuscarMatricula.addActionListener(this);
-        add(btnBuscarMatricula);
+        lblNumero = new JLabel("Número de matrícula:");
+        lblNumero.setBounds(30, 60, 150, 25);
+        add(lblNumero);
 
-        JLabel lblRetiro = new JLabel("Número de retiro:");
-        lblRetiro.setBounds(30, 60, 150, 25);
-        add(lblRetiro);
+        txtNumero = new JTextField();
+        txtNumero.setBounds(180, 60, 150, 25);
+        add(txtNumero);
 
-        txtNumRetiro = new JTextField();
-        txtNumRetiro.setBounds(180, 60, 150, 25);
-        add(txtNumRetiro);
-
-        btnBuscarRetiro = new JButton("Buscar Retiro");
-        btnBuscarRetiro.setBounds(340, 60, 150, 25);
-        btnBuscarRetiro.addActionListener(this);
-        add(btnBuscarRetiro);
+        btnConsultar = new JButton("Consultar");
+        btnConsultar.setBounds(340, 60, 150, 25);
+        btnConsultar.addActionListener(this);
+        add(btnConsultar);
 
         String[] columnas = {"Campo", "Valor"};
         modeloTabla = new DefaultTableModel(columnas, 0);
         tablaResultado = new JTable(modeloTabla);
         tablaResultado.setEnabled(false);
-		//Evitar que se puedan mover las columnas de lugar
         tablaResultado.getTableHeader().setReorderingAllowed(false);
         JScrollPane scroll = new JScrollPane(tablaResultado);
         scroll.setBounds(30, 110, 480, 280);
         add(scroll);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnBuscarMatricula) {
+        String opcion = (String) cbTipoConsulta.getSelectedItem();
+        if (opcion.equals("Matrícula")) {
             consultarMatricula();
-        }
-        if (e.getSource() == btnBuscarRetiro) {
+        } else if (opcion.equals("Retiro")) {
             consultarRetiro();
+        }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() == cbTipoConsulta && e.getStateChange() == ItemEvent.SELECTED) {
+            String opcion = (String) cbTipoConsulta.getSelectedItem();
+            if (opcion.equals("Matrícula")) {
+                lblNumero.setText("Número de matrícula:");
+            } else {
+                lblNumero.setText("Número de retiro:");
+            }
+            txtNumero.setText(""); // estado de limpieza del campo
         }
     }
 
     private void consultarMatricula() {
         modeloTabla.setRowCount(0); // limpieza de tabla
-
         int num;
         try {
-            num = Integer.parseInt(txtNumMatricula.getText().trim());
+            num = Integer.parseInt(txtNumero.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Número inválido");
             return;
@@ -112,10 +126,9 @@ public class ConsultaMatriculasRetiros extends JDialog implements ActionListener
 
     private void consultarRetiro() {
         modeloTabla.setRowCount(0); // limpieza de tabla
-
         int num;
         try {
-            num = Integer.parseInt(txtNumRetiro.getText().trim());
+            num = Integer.parseInt(txtNumero.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Número inválido");
             return;

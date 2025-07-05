@@ -8,6 +8,7 @@ import colecciones.ArrayAlumnos;
 import colecciones.ArrayCursos;
 import colecciones.ArrayMatricula;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -52,6 +53,9 @@ public class Reporte_MPC extends JDialog implements ActionListener {
 	 */
 	public Reporte_MPC() {
 		setTitle("Matriculados por curso");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 796, 575);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -3,6 +3,8 @@ package gui_reporte;
 import java.awt.BorderLayout;
 
 import clases.Alumno;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -47,6 +49,9 @@ public class Reporte_MP extends JDialog implements ActionListener {
 	 */
 	public Reporte_MP() {
 		setTitle("Matriculas pendientes");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 726, 515);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

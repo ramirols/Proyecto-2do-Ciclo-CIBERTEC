@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -39,6 +40,9 @@ public class Reporte_MV extends JDialog implements ActionListener {
 
 	public Reporte_MV() {
 		setTitle("Matriculas vigentes");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 726, 515);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

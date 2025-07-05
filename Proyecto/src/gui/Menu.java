@@ -1,7 +1,10 @@
 package gui;
 
 import java.awt.EventQueue;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -9,6 +12,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
 import colecciones.ArrayAlumnos;
 import gui_consulta.ConsultaAlumnoCurso;
@@ -55,8 +60,13 @@ public class Menu extends JFrame implements ActionListener {
 	 */
 	public Menu() {
 		setTitle("Menu");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
+		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -113,6 +123,28 @@ public class Menu extends JFrame implements ActionListener {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		// Cargar imagen central
+	    ImageIcon imagen = new ImageIcon(getClass().getResource("/imgs/fondo.png"));
+	    JLabel lblImagenCentral1 = new JLabel(imagen);
+	    contentPane.add(lblImagenCentral1); // aún sin coordenadas
+
+	    // Centrar la imagen cuando el frame se redimensiona o inicia
+	    addComponentListener(new ComponentAdapter() {
+	        @Override
+	        public void componentResized(ComponentEvent e) {
+	            int anchoImagen = imagen.getIconWidth();
+	            int altoImagen = imagen.getIconHeight();
+
+	            int anchoPanel = contentPane.getWidth();
+	            int altoPanel = contentPane.getHeight();
+
+	            int x = (anchoPanel - anchoImagen) / 2;
+	            int y = (altoPanel - altoImagen) / 2;
+
+	            lblImagenCentral1.setBounds(x, y, anchoImagen, altoImagen);
+	        }
+	    });
 		
 	}
 	

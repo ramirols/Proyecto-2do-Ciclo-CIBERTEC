@@ -12,6 +12,7 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -70,6 +71,9 @@ public class RegistroRetiro extends JDialog implements ItemListener, ActionListe
 	 */
 	public RegistroRetiro() {
 		setTitle("REGISTRO RETIRO");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setResizable(false);
 		setBounds(100, 100, 850, 580);
 		getContentPane().setLayout(null);

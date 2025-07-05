@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -72,6 +73,9 @@ public class MantenimientoCurso extends JDialog implements ActionListener {
 	@SuppressWarnings("serial")
 	public MantenimientoCurso() {
 		setTitle("Mantenimiento | Curso");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 900, 650);
 		getContentPane().setLayout(null);
 		

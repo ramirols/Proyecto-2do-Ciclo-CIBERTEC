@@ -23,6 +23,9 @@ public class ConsultaAlumnoCurso extends JDialog implements ActionListener {
 
     public ConsultaAlumnoCurso() {
         setTitle("Consulta Alumno y Curso");
+        
+        setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+        
         setSize(550, 400);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);

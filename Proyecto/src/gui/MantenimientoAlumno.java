@@ -15,6 +15,7 @@ import javax.swing.SortOrder;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -80,6 +81,9 @@ public class MantenimientoAlumno extends JDialog implements ActionListener {
 	@SuppressWarnings("serial")
 	public MantenimientoAlumno() {
 		setTitle("Mantenimiento | Persona");
+		
+		setIconImage(new ImageIcon(getClass().getResource("/imgs/favicon.png")).getImage());
+		
 		setBounds(100, 100, 900, 650);
 		getContentPane().setLayout(null);
 		
